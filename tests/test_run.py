@@ -243,7 +243,72 @@ def test_second_run_same_day_is_idempotent(tmp_path):
     seen = json.loads((state_dir / "seen.json").read_text())
     assert len(seen) == 1
 
-    # docs re-rendered (idempotent, now showing nothing new noteworthy)
+    # Empty-digest guard: the second (empty) run must NOT blank the already-
+    # published, same-day digest -- docs still shows the first run's item.
+    assert second["skipped_empty_republish"] is True
+    html = (docs_dir / "index.html").read_text()
+    assert "Recent Post About Frontier Models" in html
+    assert "Nothing noteworthy today" not in html
+
+
+def test_quiet_first_run_of_day_still_renders_empty_page(tmp_path):
+    """The guard must only protect a SAME-DAY digest. With no prior published
+    page, an empty run renders the valid 'nothing noteworthy' page."""
+    roster_path, sources_path = _setup_config(tmp_path)
+    state_dir = tmp_path / "state"
+    docs_dir = tmp_path / "docs"
+
+    # Fetch returns an RSS doc with no items -> nothing scored.
+    empty_rss = _rss([])
+    summary = run(
+        roster_path=roster_path,
+        sources_path=sources_path,
+        state_dir=state_dir,
+        docs_dir=docs_dir,
+        fetch=make_fetch({"https://example.com/feed": empty_rss}),
+        engines={"claude_p": make_scoring_engine(9)},
+        now=NOW,
+    )
+
+    assert summary["scored_kept"] == 0
+    assert summary["skipped_empty_republish"] is False
+    html = (docs_dir / "index.html").read_text()
+    assert "Nothing noteworthy today" in html
+
+
+def test_guard_does_not_trip_when_published_digest_is_a_prior_day(tmp_path):
+    """A non-empty digest from YESTERDAY must not freeze today's empty run --
+    today should render its own (empty) page since the dates differ."""
+    from datetime import timedelta
+
+    roster_path, sources_path = _setup_config(tmp_path)
+    state_dir = tmp_path / "state"
+    docs_dir = tmp_path / "docs"
+
+    # Day 1: a populated digest gets published.
+    run(
+        roster_path=roster_path,
+        sources_path=sources_path,
+        state_dir=state_dir,
+        docs_dir=docs_dir,
+        fetch=make_fetch({"https://example.com/feed": ONE_ITEM_RSS}),
+        engines={"claude_p": make_scoring_engine(9)},
+        now=NOW,
+    )
+
+    # Day 2: nothing new (all seen); different date -> guard must NOT trip.
+    next_day = NOW + timedelta(days=1)
+    second = run(
+        roster_path=roster_path,
+        sources_path=sources_path,
+        state_dir=state_dir,
+        docs_dir=docs_dir,
+        fetch=make_fetch({"https://example.com/feed": ONE_ITEM_RSS}),
+        engines={"claude_p": make_scoring_engine(9)},
+        now=next_day,
+    )
+    assert second["scored_kept"] == 0
+    assert second["skipped_empty_republish"] is False
     html = (docs_dir / "index.html").read_text()
     assert "Nothing noteworthy today" in html
 

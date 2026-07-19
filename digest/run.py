@@ -16,6 +16,7 @@ import argparse
 import dataclasses
 import json
 import logging
+import re
 import sys
 import time
 from datetime import date as date_cls
@@ -141,6 +142,24 @@ def _resolve_now(date: str | None, now: datetime | None) -> datetime:
     return datetime.now(timezone.utc)
 
 
+def _published_digest_state(index_path: Path) -> tuple[bool, str | None]:
+    """Inspect an already-rendered index.html for the empty-digest guard.
+
+    Returns (has_items, digest_date) — whether the published page currently
+    shows any items, and the PT date in its header (or None if unreadable /
+    not present). Used to avoid overwriting a good same-day digest with an
+    empty one on a re-run."""
+    if not index_path.exists():
+        return False, None
+    try:
+        html = index_path.read_text(encoding="utf-8")
+    except OSError:
+        return False, None
+    has_items = "<article>" in html
+    match = re.search(r"(\d{4}-\d{2}-\d{2}) \(PT\)", html)
+    return has_items, (match.group(1) if match else None)
+
+
 # --------------------------------------------------------------------------
 # Pipeline
 # --------------------------------------------------------------------------
@@ -221,7 +240,21 @@ def run(
         }
 
         out_dir = (state_dir / "preview") if dry_run else Path(docs_dir)
-        render_all(scored, gaps, run_meta, settings, out_dir=out_dir)
+
+        # Empty-digest guard: a real run that produced nothing must NOT blank an
+        # already-published, non-empty digest for the same day (e.g. a manual
+        # re-run after items were marked seen). Skip the render so docs/ is left
+        # intact and run_daily.sh finds no change to commit. A genuinely quiet
+        # first run of a new day still renders its "nothing noteworthy" page,
+        # because the guard only trips when the live page is same-dated.
+        skipped_empty_republish = False
+        if not dry_run and len(scored) == 0:
+            prev_has_items, prev_date = _published_digest_state(out_dir / "index.html")
+            if prev_has_items and prev_date == run_date.isoformat():
+                skipped_empty_republish = True
+
+        if not skipped_empty_republish:
+            render_all(scored, gaps, run_meta, settings, out_dir=out_dir)
 
         if not dry_run:
             record_seen(kept_items, seen_path)
@@ -232,7 +265,13 @@ def run(
             **run_meta,
             "gaps": [dataclasses.asdict(g) for g in gaps],
             "duration_s": duration_s,
+            "skipped_empty_republish": skipped_empty_republish,
         }
+        if skipped_empty_republish:
+            logger.info(
+                "skipped_empty_republish",
+                extra={"fields": {"date": run_date.isoformat()}},
+            )
 
         logger.info("run_summary", extra={"fields": summary})
 
