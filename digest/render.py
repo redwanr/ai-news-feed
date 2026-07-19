@@ -172,7 +172,7 @@ def _render_item_html(item: Any) -> str:
 
     parts = [
         "<article>",
-        f'  <h3><a href="{h_escape(url, quote=True)}">{h_escape(title)}</a></h3>',
+        f'  <h3><a href="{h_escape(url, quote=True)}" target="_blank" rel="noopener">{h_escape(title)}</a></h3>',
         f'  <p class="byline">{h_escape(byline)}</p>',
     ]
     if summary:
@@ -181,7 +181,7 @@ def _render_item_html(item: Any) -> str:
         parts.append(f'  <p class="why"><em>Why it matters: {h_escape(why_matters)}</em></p>')
     if also:
         links_html = ", ".join(
-            f'<a href="{h_escape(u, quote=True)}">{h_escape(t or u)}</a>' for t, u in also
+            f'<a href="{h_escape(u, quote=True)}" target="_blank" rel="noopener">{h_escape(t or u)}</a>' for t, u in also
         )
         parts.append(f'  <p class="also">also: {links_html}</p>')
     parts.append("</article>")

@@ -87,12 +87,34 @@ def test_hrefs_match_item_url(tmp_path: Path):
     render_all(items, [], RUN_META, SETTINGS, out_dir=tmp_path)
 
     html_text = (tmp_path / "index.html").read_text()
-    hrefs = re.findall(r'<h3><a href="([^"]+)">', html_text)
+    hrefs = re.findall(r'<h3><a href="([^"]+)"', html_text)
     assert set(hrefs) == {it.url for it in items}
 
     md_text = (tmp_path / "digest.md").read_text()
     for it in items:
         assert f"]({it.url})" in md_text
+
+
+def test_article_links_open_in_new_tab(tmp_path: Path):
+    """Item title links (and also-links) open a new tab and set rel=noopener."""
+    item = make_item(
+        url="https://a.example.com/one",
+        title="One",
+        also_links=[FakeAlsoLink(title="Dup", url="https://dup.example.com/x")],
+    )
+    render_all([item], [], RUN_META, SETTINGS, out_dir=tmp_path)
+    html_text = (tmp_path / "index.html").read_text()
+
+    # Title link opens new tab with noopener.
+    assert re.search(
+        r'<h3><a href="https://a\.example\.com/one" target="_blank" rel="noopener">',
+        html_text,
+    )
+    # Also-link opens new tab too.
+    assert 'href="https://dup.example.com/x" target="_blank" rel="noopener"' in html_text
+    # Internal footer nav (feed.xml / digest.md) stays in the same tab.
+    assert '<a href="feed.xml">' in html_text
+    assert 'target="_blank"' not in html_text.split('<footer>')[1]
 
 
 def test_section_order_and_omission(tmp_path: Path):
