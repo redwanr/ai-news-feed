@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+*.pyc
+state/*
+!state/ledger.jsonl
+!state/.gitkeep
+.DS_Store
