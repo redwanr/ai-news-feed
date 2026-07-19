@@ -2,7 +2,7 @@ lab_leaders:
   demis_hassabis: { name: "Demis Hassabis", gnews: true, x_handle: "demishassabis",
                     bluesky: "[VERIFY]" }
   dario_amodei:   { name: "Dario Amodei", gnews: true,
-                    blog_rss: "https://darioamodei.com/feed.xml" }   # [VERIFY]
+                    blog_rss: "[VERIFY: darioamodei.com/feed.xml 404 on 2026-07-19; gnews covers him]" }
   sam_altman:     { name: "Sam Altman", gnews: true, x_handle: "sama",
                     blog_rss: "https://blog.samaltman.com/posts.atom" } # [VERIFY]
   yann_lecun:     { name: "Yann LeCun", gnews: true, bluesky: "yann-lecun.bsky.social" } # [VERIFY]
@@ -13,7 +13,7 @@ researchers:
   ilya_sutskever:  { name: "Ilya Sutskever", gnews: true,
                      arxiv_query: 'au:"Ilya Sutskever"' }
   francois_chollet: { name: "François Chollet", gnews: true,
-                     bluesky: "fchollet.bsky.social" }  # [VERIFY]
+                     bluesky: "[VERIFY: fchollet.bsky.social 400 bad handle on 2026-07-19; gnews covers him]" }
   neel_nanda:      { name: "Neel Nanda",
                      bluesky: "[VERIFY]", arxiv_query: 'au:"Neel Nanda"' }
   jan_leike:       { name: "Jan Leike", bluesky: "janleike.bsky.social", # [VERIFY]

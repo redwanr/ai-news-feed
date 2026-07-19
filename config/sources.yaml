@@ -35,6 +35,6 @@ discovery:
     google_ai:     { type: rss, url: "https://blog.google/technology/ai/rss/" } # [VERIFY]
   newsletters:
     import_ai:     { type: rss, url: "https://importai.substack.com/feed" }
-    the_batch:     { type: rss, url: "https://www.deeplearning.ai/the-batch/feed/" } # [VERIFY]
+    the_batch:     { type: rss, url: "[VERIFY: deeplearning.ai/the-batch/feed 404 on 2026-07-19; no public feed found]" }
     interconnects: { type: rss, url: "https://www.interconnects.ai/feed" }
-    epoch_ai:      { type: rss, url: "https://epoch.ai/feed.xml" }              # [VERIFY]
+    epoch_ai:      { type: rss, url: "[VERIFY: epoch.ai/feed.xml 404 on 2026-07-19; no public feed found]" }
