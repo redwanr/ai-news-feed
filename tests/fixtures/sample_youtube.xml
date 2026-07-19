@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:yt="http://www.youtube.com/xml/schemas/2015">
+  <title>YouTube channel feed</title>
+  <entry>
+    <title>A talk about AI safety and scaling</title>
+    <id>yt:video:abc123</id>
+    <link rel="alternate" href="https://www.youtube.com/watch?v=abc123"/>
+    <published>2026-07-15T18:00:00+00:00</published>
+    <updated>2026-07-15T18:00:00+00:00</updated>
+    <author><name>Sample Channel</name></author>
+    <summary>Video description discussing AI safety.</summary>
+  </entry>
+  <entry>
+    <title>An old video</title>
+    <id>yt:video:old999</id>
+    <link rel="alternate" href="https://www.youtube.com/watch?v=old999"/>
+    <published>2020-01-01T00:00:00+00:00</published>
+    <updated>2020-01-01T00:00:00+00:00</updated>
+    <author><name>Sample Channel</name></author>
+    <summary>Old video used to test the since filter.</summary>
+  </entry>
+</feed>

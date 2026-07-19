@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+<channel>
+  <title>Sample Blog</title>
+  <link>https://example.com</link>
+  <item>
+    <title>Recent Post About Frontier Models</title>
+    <link>https://example.com/posts/recent?utm_source=twitter</link>
+    <pubDate>Fri, 17 Jul 2026 10:00:00 GMT</pubDate>
+    <author>jane@example.com (Jane Doe)</author>
+    <description>A detailed look at frontier model progress this week.</description>
+  </item>
+  <item>
+    <title>Old Post</title>
+    <link>https://example.com/posts/old</link>
+    <pubDate>Mon, 01 Jun 2026 10:00:00 GMT</pubDate>
+    <description>An older post that should be filtered out by the since window.</description>
+  </item>
+  <item>
+    <title>No Date Post</title>
+    <link>https://example.com/posts/nodate</link>
+    <description>This post has no pubDate and should always be skipped.</description>
+  </item>
+</channel>
+</rss>

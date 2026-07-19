@@ -1,0 +1,24 @@
+{
+  "feed": [
+    {
+      "post": {
+        "uri": "at://did:plc:abc123/app.bsky.feed.post/3kexample1",
+        "author": {"handle": "example.bsky.social"},
+        "record": {
+          "text": "This is a long post about frontier AI models and why they matter for the future of research, going well beyond one hundred and twenty characters in length to test the title truncation logic properly.",
+          "createdAt": "2026-07-17T09:30:00.000Z"
+        }
+      }
+    },
+    {
+      "post": {
+        "uri": "at://did:plc:abc123/app.bsky.feed.post/3kexample2",
+        "author": {"handle": "example.bsky.social"},
+        "record": {
+          "text": "An older post outside the since window.",
+          "createdAt": "2026-06-01T09:30:00.000Z"
+        }
+      }
+    }
+  ]
+}

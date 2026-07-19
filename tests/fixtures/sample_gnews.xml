@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+<channel>
+  <title>Google News Search</title>
+  <item>
+    <title>Anthropic ships new frontier model update</title>
+    <link>https://news.example.com/anthropic-update</link>
+    <pubDate>Fri, 17 Jul 2026 09:00:00 GMT</pubDate>
+    <description>Coverage of the new Anthropic release and its implications.</description>
+  </item>
+  <item>
+    <title>Local weather report for the weekend</title>
+    <link>https://news.example.com/weather</link>
+    <pubDate>Fri, 17 Jul 2026 09:00:00 GMT</pubDate>
+    <description>Nothing about AI here at all.</description>
+  </item>
+</channel>
+</rss>
