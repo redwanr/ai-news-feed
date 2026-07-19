@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 from typing import Any, TypedDict
-from urllib.parse import parse_qs, urlparse, urlunparse
+from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 
 import yaml
 
@@ -40,23 +40,18 @@ def canonical_url(url: str) -> str:
     # Parse query string
     params = parse_qs(parsed.query, keep_blank_values=True)
 
-    # Filter out utm_* and tracking params
+    # Filter out utm_* (prefix match) and exact tracking param names
     filtered_params = {}
-    tracking_keys = {"utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term",
-                    "ref", "source", "fbclid", "gclid"}
+    exact_tracking_keys = {"ref", "source", "fbclid", "gclid"}
     for key, values in params.items():
-        if key.lower() not in tracking_keys:
-            filtered_params[key] = values
+        key_lower = key.lower()
+        # Skip if matches utm_* prefix or exact tracking keys
+        if key_lower.startswith("utm_") or key_lower in exact_tracking_keys:
+            continue
+        filtered_params[key] = values
 
-    # Rebuild query string
-    query_parts = []
-    for key in sorted(filtered_params.keys()):
-        for value in filtered_params[key]:
-            if value:
-                query_parts.append(f"{key}={value}")
-            else:
-                query_parts.append(key)
-    query = "&".join(query_parts)
+    # Rebuild query string using urlencode to preserve percent-encoding
+    query = urlencode(filtered_params, doseq=True)
 
     # Strip trailing slash from path
     path = parsed.path.rstrip("/") or "/"
@@ -101,8 +96,8 @@ def load_roster(path: str | Path) -> dict[str, dict[str, RosterEntry]]:
     """
     Load and validate roster.yaml.
     Returns dict of groups -> person_key -> RosterEntry.
-    Skips values containing '[VERIFY]' substring.
-    Raises ValueError if unknown group or missing 'name' field.
+    Removes fields whose values contain '[VERIFY]' substring; keeps person if 'name' remains valid.
+    Raises ValueError if unknown group, missing 'name' field, or 'name' contains '[VERIFY]'.
     """
     path = Path(path)
     with path.open() as f:
@@ -120,15 +115,19 @@ def load_roster(path: str | Path) -> dict[str, dict[str, RosterEntry]]:
             if not isinstance(person_data, dict):
                 continue
 
-            # Skip entries with [VERIFY]
-            if any("[VERIFY" in str(v) for v in person_data.values()):
-                continue
+            # Remove fields whose values contain [VERIFY]
+            cleaned_entry = {}
+            for key, value in person_data.items():
+                if isinstance(value, str) and "[VERIFY" in value:
+                    # Skip this field
+                    continue
+                cleaned_entry[key] = value
 
-            # Validate required 'name' field
-            if "name" not in person_data:
-                raise ValueError(f"Missing 'name' field in {group_name}.{person_key}")
+            # Validate required 'name' field exists and is valid
+            if "name" not in cleaned_entry:
+                raise ValueError(f"Missing or invalid 'name' field in {group_name}.{person_key}")
 
-            roster[group_name][person_key] = person_data
+            roster[group_name][person_key] = cleaned_entry
 
     return roster
 

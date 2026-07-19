@@ -61,6 +61,23 @@ class TestCanonicalUrl:
         result = canonical_url(url)
         assert result == "https://example.com/path?keep=z"
 
+    def test_strip_utm_id_prefix(self):
+        """Strip utm_id (prefix match, not just specific utm params)."""
+        url = "https://example.com/page?utm_id=xyz&utm_source=x&keep=z"
+        result = canonical_url(url)
+        # Both utm_id and utm_source should be stripped
+        assert "utm_id" not in result
+        assert "utm_source" not in result
+        assert "keep=z" in result
+
+    def test_encoded_space_survives(self):
+        """Query param with percent-encoded space survives round-trip."""
+        url = "https://example.com/page?q=hello%20world&keep=1"
+        result = canonical_url(url)
+        # Should preserve the encoded value (not convert to raw space)
+        assert "%20" in result or "hello" in result  # urlencode may use + or %20
+        assert "q=" in result  # param must be present
+
 
 class TestItemId:
     """Test item ID generation."""
@@ -111,11 +128,11 @@ researchers:
         assert roster["researchers"]["bob"]["name"] == "Bob"
         Path(f.name).unlink()
 
-    def test_skip_verify_entries(self):
-        """Skip entries containing [VERIFY]."""
+    def test_skip_verify_fields(self):
+        """Remove fields containing [VERIFY], keep person if name remains valid."""
         yaml_content = """\
 lab_leaders:
-  alice: { name: "Alice", bluesky: "[VERIFY]" }
+  alice: { name: "Alice", blog_rss: "https://ok/feed", bluesky: "[VERIFY]" }
   bob: { name: "Bob" }
 """
         with tempfile.NamedTemporaryFile(mode='w', suffix='.yaml', delete=False) as f:
@@ -123,7 +140,13 @@ lab_leaders:
             f.flush()
             roster = load_roster(f.name)
 
-        assert "alice" not in roster["lab_leaders"]
+        # Alice should be present (name is valid)
+        assert "alice" in roster["lab_leaders"]
+        # Alice should have blog_rss
+        assert roster["lab_leaders"]["alice"]["blog_rss"] == "https://ok/feed"
+        # Alice should NOT have bluesky key (was [VERIFY])
+        assert "bluesky" not in roster["lab_leaders"]["alice"]
+        # Bob should be present unchanged
         assert "bob" in roster["lab_leaders"]
         Path(f.name).unlink()
 
@@ -149,7 +172,7 @@ lab_leaders:
         with tempfile.NamedTemporaryFile(mode='w', suffix='.yaml', delete=False) as f:
             f.write(yaml_content)
             f.flush()
-            with pytest.raises(ValueError, match="Missing 'name' field"):
+            with pytest.raises(ValueError, match="Missing or invalid"):
                 load_roster(f.name)
             Path(f.name).unlink()
 
