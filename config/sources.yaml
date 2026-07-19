@@ -1,0 +1,40 @@
+settings:
+  timezone: America/Los_Angeles
+  window_hours: 26
+  score_threshold: 6
+  keep_top: 25
+  monthly_cap_usd: 5.0
+  batch_size: 40
+  site_title: "GenAI Signal"
+  site_url: "[VERIFY after Pages setup]"
+  llm:
+    primary: claude_p          # claude -p, subscription
+    claude_model: haiku
+    fallback1: gemini
+    gemini_model: gemini-3.1-flash-lite-preview
+    fallback2: anthropic_api
+    anthropic_model: claude-haiku-4-5-20251001
+
+keywords:   # discovery filters (HN/Google News must match roster name OR one of these)
+  - frontier model
+  - AI safety
+  - AI policy
+  - AI economics
+  - inference cost
+  - compute scaling
+  - AGI
+
+discovery:
+  hn_enabled: true
+  gnews_queries:
+    - '"Anthropic"'
+    - '"Google DeepMind"'
+  lab_blogs:
+    deepmind_blog: { type: rss, url: "https://deepmind.google/blog/rss.xml" }   # [VERIFY]
+    openai_news:   { type: rss, url: "https://openai.com/news/rss.xml" }        # [VERIFY]
+    google_ai:     { type: rss, url: "https://blog.google/technology/ai/rss/" } # [VERIFY]
+  newsletters:
+    import_ai:     { type: rss, url: "https://importai.substack.com/feed" }
+    the_batch:     { type: rss, url: "https://www.deeplearning.ai/the-batch/feed/" } # [VERIFY]
+    interconnects: { type: rss, url: "https://www.interconnects.ai/feed" }
+    epoch_ai:      { type: rss, url: "https://epoch.ai/feed.xml" }              # [VERIFY]
