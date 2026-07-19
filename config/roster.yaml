@@ -1,0 +1,52 @@
+lab_leaders:
+  demis_hassabis: { name: "Demis Hassabis", gnews: true, x_handle: "demishassabis",
+                    bluesky: "[VERIFY]" }
+  dario_amodei:   { name: "Dario Amodei", gnews: true,
+                    blog_rss: "https://darioamodei.com/feed.xml" }   # [VERIFY]
+  sam_altman:     { name: "Sam Altman", gnews: true, x_handle: "sama",
+                    blog_rss: "https://blog.samaltman.com/posts.atom" } # [VERIFY]
+  yann_lecun:     { name: "Yann LeCun", gnews: true, bluesky: "yann-lecun.bsky.social" } # [VERIFY]
+researchers:
+  andrej_karpathy: { name: "Andrej Karpathy", gnews: true, x_handle: "karpathy",
+                     blog_rss: "https://karpathy.bearblog.dev/feed/",   # [VERIFY]
+                     youtube_channel_id: "[VERIFY]" }
+  ilya_sutskever:  { name: "Ilya Sutskever", gnews: true,
+                     arxiv_query: 'au:"Ilya Sutskever"' }
+  francois_chollet:{ name: "François Chollet", gnews: true,
+                     bluesky: "fchollet.bsky.social" }  # [VERIFY]
+  neel_nanda:      { name: "Neel Nanda",
+                     bluesky: "[VERIFY]", arxiv_query: 'au:"Neel Nanda"' }
+  jan_leike:       { name: "Jan Leike", bluesky: "janleike.bsky.social", # [VERIFY]
+                     blog_rss: "https://aligned.substack.com/feed" }
+economists:
+  erik_brynjolfsson: { name: "Erik Brynjolfsson", gnews: true,
+                       blog_rss: "[VERIFY: digitaleconomy.stanford.edu feed]" }
+  daron_acemoglu:    { name: "Daron Acemoglu", gnews: true }
+  tyler_cowen:       { name: "Tyler Cowen",
+                       blog_rss: "https://marginalrevolution.com/feed" }
+  anton_korinek:     { name: "Anton Korinek", gnews: true,
+                       arxiv_query: 'au:"Anton Korinek"' }
+policymakers:
+  dean_ball:      { name: "Dean Ball",
+                    blog_rss: "https://www.hyperdimensional.co/feed" }  # [VERIFY]
+  jack_clark:     { name: "Jack Clark",
+                    blog_rss: "https://importai.substack.com/feed",
+                    bluesky: "jackclark.bsky.social" }  # [VERIFY]
+  miles_brundage: { name: "Miles Brundage",
+                    blog_rss: "https://milesbrundage.substack.com/feed", # [VERIFY]
+                    bluesky: "[VERIFY]" }
+  helen_toner:    { name: "Helen Toner", gnews: true,
+                    blog_rss: "https://helentoner.substack.com/feed" }   # [VERIFY]
+thinkers:
+  zvi_mowshowitz: { name: "Zvi Mowshowitz",
+                    blog_rss: "https://thezvi.substack.com/feed" }
+  ethan_mollick:  { name: "Ethan Mollick",
+                    blog_rss: "https://www.oneusefulthing.org/feed",
+                    bluesky: "emollick.bsky.social" }  # [VERIFY]
+  simon_willison: { name: "Simon Willison",
+                    blog_rss: "https://simonwillison.net/atom/everything/" }
+  nathan_lambert: { name: "Nathan Lambert",
+                    blog_rss: "https://www.interconnects.ai/feed",
+                    bluesky: "natolambert.bsky.social" }  # [VERIFY]
+  gwern:          { name: "Gwern Branwen",
+                    blog_rss: "https://gwern.net/feed.xml" }  # [VERIFY]
