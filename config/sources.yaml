@@ -6,7 +6,7 @@ settings:
   monthly_cap_usd: 5.0
   batch_size: 40
   site_title: "GenAI Signal"
-  site_url: "[VERIFY after Pages setup]"
+  site_url: "https://redwanr.github.io/ai-news-feed/"
   llm:
     primary: claude_p          # claude -p, subscription
     claude_model: haiku
