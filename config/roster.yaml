@@ -12,7 +12,7 @@ researchers:
                      youtube_channel_id: "[VERIFY]" }
   ilya_sutskever:  { name: "Ilya Sutskever", gnews: true,
                      arxiv_query: 'au:"Ilya Sutskever"' }
-  francois_chollet:{ name: "François Chollet", gnews: true,
+  francois_chollet: { name: "François Chollet", gnews: true,
                      bluesky: "fchollet.bsky.social" }  # [VERIFY]
   neel_nanda:      { name: "Neel Nanda",
                      bluesky: "[VERIFY]", arxiv_query: 'au:"Neel Nanda"' }
