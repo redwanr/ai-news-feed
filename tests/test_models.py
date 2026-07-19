@@ -260,3 +260,34 @@ class TestItemDataclass:
         assert item.id == "abc123"
         assert item.source_type == "rss"
         assert item.title == "Test Title"
+
+
+class TestRealConfigFiles:
+    """Load the actual shipped config files (regression: they must be valid YAML
+    and satisfy the loaders — synthetic-only tests missed a malformed entry)."""
+
+    CONFIG_DIR = Path(__file__).resolve().parent.parent / "config"
+
+    def test_real_roster_loads(self):
+        roster = load_roster(self.CONFIG_DIR / "roster.yaml")
+        # Every group is known and every kept entry has a name.
+        for group, entries in roster.items():
+            assert group in {
+                "lab_leaders", "researchers", "economists", "policymakers", "thinkers",
+            }
+            for person in entries.values():
+                assert person.get("name")
+        # Spot-check a person whose entry previously had a YAML syntax bug.
+        assert roster["researchers"]["francois_chollet"]["name"] == "François Chollet"
+
+    def test_real_sources_loads(self):
+        settings, discovery = load_sources(self.CONFIG_DIR / "sources.yaml")
+        assert settings["timezone"] == "America/Los_Angeles"
+        assert settings["window_hours"] == 26
+        assert settings["score_threshold"] == 6
+        assert settings["keep_top"] == 25
+        assert settings["monthly_cap_usd"] == 5.0
+        assert settings["batch_size"] == 40
+        # [VERIFY] site_url must be dropped, not surfaced as a real value.
+        assert "[VERIFY" not in str(settings.get("site_url", ""))
+        assert "keywords" in settings and settings["keywords"]
