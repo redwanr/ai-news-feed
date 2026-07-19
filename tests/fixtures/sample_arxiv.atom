@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>ArXiv Query Results</title>
+  <entry>
+    <title>Scaling Laws for Something Surprising</title>
+    <id>http://arxiv.org/abs/2607.12345v1</id>
+    <link href="http://arxiv.org/abs/2607.12345v1" rel="alternate"/>
+    <published>2026-07-16T12:00:00Z</published>
+    <updated>2026-07-16T12:00:00Z</updated>
+    <author><name>Neel Nanda</name></author>
+    <summary>We study scaling behavior in a new setting and find surprising results.</summary>
+  </entry>
+  <entry>
+    <title>An Old Paper</title>
+    <id>http://arxiv.org/abs/2001.00001v1</id>
+    <link href="http://arxiv.org/abs/2001.00001v1" rel="alternate"/>
+    <published>2020-01-01T00:00:00Z</published>
+    <updated>2020-01-01T00:00:00Z</updated>
+    <author><name>Neel Nanda</name></author>
+    <summary>An old paper used to test the since filter.</summary>
+  </entry>
+</feed>
